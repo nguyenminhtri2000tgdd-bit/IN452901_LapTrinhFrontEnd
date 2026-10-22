@@ -1,0 +1,144 @@
+/* ==========================================================================
+   tokens.css — Design token của EduHub Web
+   Mọi tệp khác chỉ dùng var(--…) khai báo ở đây, không viết mã màu trực tiếp.
+   Ch04 sẽ chép các token này sang @theme của Tailwind.
+   ========================================================================== */
+
+:root {
+  /*Phiên bản 2 (Tự lạm lại)*/
+  /* Bảng màu hồng */
+  --palette-pink-900: #450026;   /* Hồng tím rất đậm */
+  --palette-pink-700: #87006a;   /* Hồng tím đậm */
+  --palette-pink-300: #ff7ff4;   /* Hồng tím sáng */
+  --palette-pink-50: #fff0f9;    /* Hồng phấn rất nhạt */
+  --palette-pink-600: #cc0070;   /* Hồng đậm, màu nhấn */
+  --palette-red-900: #800015;    /* Đỏ rượu vang rất đậm */
+  --palette-ink: #1a1a2e;        /* chữ */
+  --palette-white: #ffffff;
+  --palette-orange-600: #c2410c;
+  --palette-orange-100: #ffedd5;
+  --palette-red-600: #dc2626;
+  --palette-green-700: #15803d;
+  /* TODO(ch2-T1): Màu theo vai trò (semantic), lấy giá trị từ palette ở trên:
+/* ---- 2. Màu theo vai trò (semantic) — phiên bản màu hồng ---- */
+  --color-primary: var(--palette-pink-700);
+  --color-primary-hover: var(--palette-pink-900);
+  --color-on-primary: var(--palette-white);   /* Chữ trên nền màu chính */
+
+  --color-accent: var(--palette-pink-600);
+  --color-accent-strong: var(--palette-red-900);
+
+  --color-bg: var(--palette-pink-50);         /* Nền toàn trang */
+  --color-surface: var(--palette-white);      /* Nền card, form */
+  --color-surface-muted: #ffe0f1;             /* Nền phụ hồng nhạt */
+
+  --color-text: var(--palette-ink);           /* Chữ chính */
+  --color-text-muted: #6b465b;                /* Chữ phụ */
+  --color-border: #edc5dc;                    /* Đường viền hồng nhạt */
+
+  --color-link: var(--palette-pink-700);      /* Liên kết */
+  --color-focus: var(--palette-pink-600);     /* Viền khi focus */
+
+  --color-warning: var(--palette-orange-600); /* Cảnh báo */
+  --color-warning-bg: var(--palette-orange-100);
+
+  --color-danger: var(--palette-red-600);     /* Lỗi, thao tác nguy hiểm */
+  --color-success: var(--palette-green-700);  /* Thành công */
+
+  --color-header-bg: var(--palette-pink-900); /* Nền header */
+  --color-header-text: var(--palette-white); /* Chữ header */
+
+  /* TODO(ch2-T1): Chữ*/
+   --font-sans: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* TODO(ch2-T1): Khoảng cách theo thang 4px bằng rem: --space-1 (0.25rem), --space-2, --space-3,
+       --space-4, --space-6, --space-8, --space-12, --space-16 */
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  --text-3xl: clamp(1.875rem, 1.3rem + 2.4vw, 3rem);
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.6;
+  --weight-normal: 400;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---- 4. Khoảng cách*/
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-12: 3rem;    /* 48px */
+  --space-16: 4rem;    /* 64px */
+
+  /* TODO(ch2-T1): Bo góc --radius-sm/md/lg/full; đổ bóng --shadow-sm/md/lg;
+       --container-max (vd. 72rem); thời gian chuyển động --duration-fast/normal */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-full: 999px;
+
+  /*Đổ bóng ---- */
+  --shadow-sm: 0 1px 2px rgb(0 29 69 / 0.08);
+  --shadow-md: 0 4px 12px rgb(0 29 69 / 0.1);
+  --shadow-lg: 0 12px 28px rgb(0 29 69 / 0.16);
+
+  /*Bố cục và chuyển động ---- */
+  --container-max: 72rem;        /* 1152px */
+  --container-narrow: 44rem;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* TODO(ch2-T1): Ghi chú breakpoint (var() KHÔNG dùng được trong @media, chỉ để tra cứu):
+       --breakpoint-sm: 40rem;  (640px)   --breakpoint-lg: 64rem;  (1024px) */
+  --breakpoint-sm: 40rem;
+  --breakpoint-lg: 64rem;
+  /* TODO(ch2-T1): color-scheme: light dark; */
+  color-scheme: light dark;
+}
+
+/* TODO(ch2-T1): Dark mode — trong @media (prefers-color-scheme: dark) { :root { … } }
+   chỉ đổi giá trị các token --color-* (nền tối, chữ sáng, primary sáng hơn để đủ tương phản). */
+/* ---- Dark mode: phiên bản màu hồng ---- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: var(--palette-pink-300);
+    --color-primary-hover: #ffb3ed;
+    --color-on-primary: var(--palette-pink-900);
+
+    --color-accent: var(--palette-pink-300);
+    --color-accent-strong: #ff7ff4;
+
+    --color-bg: #1a0010;                  /* Nền toàn trang */
+    --color-surface: #2b001b;              /* Nền card, form */
+    --color-surface-muted: #450026;        /* Nền phụ */
+
+    --color-text: #fff0f9;                 /* Chữ chính */
+    --color-text-muted: #d6a9c4;           /* Chữ phụ */
+    --color-border: #693451;               /* Đường viền */
+
+    --color-link: var(--palette-pink-300);
+    --color-focus: #ff7ff4;
+
+    --color-warning: #fdba74;
+    --color-warning-bg: #3b1d0a;
+
+    --color-danger: #f87171;
+    --color-success: #4ade80;
+
+    --color-header-bg: #12000b;             /* Nền header */
+    --color-header-text: #fff0f9;           /* Chữ header */
+
+    /* Đổ bóng trong giao diện tối */
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-md: 0 4px 12px rgb(0 0 0 / 0.45);
+    --shadow-lg: 0 12px 28px rgb(0 0 0 / 0.55);
+  }
+}

@@ -1,0 +1,145 @@
+/* ==========================================================================
+   base.css — đặt lại mặc định của trình duyệt + kiểu cho thẻ HTML trần
+   Chỉ dùng selector thẻ (body, h1, a, img…), chưa dùng class.
+   ========================================================================== */
+
+/* TODO(ch2-T2): box-sizing: border-box cho *, *::before, *::after */
+*,
+*::before,
+*::after {
+   box-sizing: border-box;
+}
+/**: chọn tất cả phần tử HTML.
+*::before: chọn phần tử giả ::before.
+*::after: chọn phần tử giả ::after.
+box-sizing: border-box: quy định cách tính chiều rộng và chiều cao của phần tử.*/
+
+/* TODO(ch2-T2): Bỏ margin mặc định bằng :where(body, h1, h2, h3, p, ul, ol, dl, dd, figure, fieldset)
+   (:where() có specificity 0 nên các lớp sau ghi đè dễ dàng) */
+:where(body, h1, h2, h3, p, ul, ol, dl, dd, figure, fieldset) {
+  margin: 0;
+}
+
+html {
+  /* Cuộn mượt khi bấm link #neo, -webkit- cho Safari cũ để chữ không tự phóng to */
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* TODO(ch2-T2): body — font, cỡ chữ, line-height, màu chữ, màu nền lấy từ token;
+   display: flex + flex-direction: column, và main { flex: 1 } để footer luôn ở đáy */
+
+/* TODO(ch2-T2): Tiêu đề h1/h2/h3 dùng thang chữ token; img/svg { display: block; max-inline-size: 100%; block-size: auto } */
+
+/* TODO(ch2-T2): input, button, select, textarea kế thừa font (font: inherit) */
+
+/* TODO(ch2-T2): :focus-visible — outline 3px màu --color-focus, outline-offset 2px */
+
+body {
+  min-block-size: 100vh;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+
+  /* Màu chữ và nền theo giao diện hồng tím */
+  color: var(--color-text);
+  background-color: var(--color-bg);
+
+  /* Sticky footer: main giãn ra để đẩy footer xuống cuối trang */
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Tiêu đề */
+:is(h1, h2, h3) {
+  line-height: var(--leading-tight);
+  font-weight: var(--weight-bold);
+  text-wrap: balance;
+  color: var(--color-text);
+}
+
+h1 {
+  font-size: var(--text-3xl);
+  color:palevioletred;
+}
+
+h2 {
+  font-size: var(--text-2xl);
+  color:palevioletred;
+}
+
+h3 {
+  font-size: var(--text-xl);
+}
+
+/* Đoạn văn */
+p {
+  text-wrap: pretty;
+}
+
+/* Ảnh và SVG không tràn khỏi khung */
+img,
+svg {
+  display: block;
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+/* Liên kết sử dụng màu hồng tím chủ đạo */
+a {
+  color: var(--color-link);
+  text-underline-offset: 0.2em;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+  text-decoration-thickness: 2px;
+}
+
+/* Input, button, select, textarea kế thừa font và màu chữ */
+:where(input, button, select, textarea) {
+  font: inherit;
+  color: inherit;
+}
+
+/* Trường có chú thích */
+abbr[title] {
+  text-decoration: none;
+  color: var(--color-danger);
+  cursor: help;
+}
+
+/* Chữ phụ, mô tả */
+small {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* Viền focus phù hợp bảng màu hồng */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* TODO(ch2-T2): @media (prefers-reduced-motion: reduce) — tắt animation/transition, scroll-behavior: auto */
+/* Người dùng bật chế độ giảm chuyển động */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
