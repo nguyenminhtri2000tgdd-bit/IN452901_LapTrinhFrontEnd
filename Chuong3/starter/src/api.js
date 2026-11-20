@@ -25,13 +25,56 @@ async function request(path, { method = 'GET', body, signal } = {}) {
   // 3. !response.ok: đọc JSON ProblemDetails { title, detail, errors } rồi ném
   //    new ApiError(response.status, detail ?? title, errors).
   // 4. Thành công: trả response.json() (204 thì trả null).
-  throw new ApiError(0, `TODO(ch3-T2): chưa cài request() — ${method} ${API_URL}${path}`);
+  let response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      method,
+      signal,
+      headers: body
+        ? { 'Content-Type': 'application/json' }
+        : {},
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw error;
+    }
+
+    throw new ApiError(0, 'Không kết nối được máy chủ. Vui lòng thử lại.');
+  }
+
+  if (!response.ok) {
+    const problem = await response.json();
+
+    throw new ApiError(
+      response.status,
+      problem.detail ?? problem.title,
+      problem.errors ?? {}
+    );
+  }
+
+  if (response.status === 204) {
+    return null;
+  }
+
+  return response.json();
 }
 
 /** Bỏ các tham số rỗng để URL gọn: { q: '', clubId: 'x' } → "?clubId=x" */
 function toQueryString(params) {
   // TODO(ch3-T2): dùng URLSearchParams, bỏ giá trị undefined/null/'' ; không có tham số nào thì trả ''
-  return '';
+  const searchParams = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value === undefined || value === null || value === '') {
+      continue;
+    }
+    searchParams.append(key, value);
+  }
+
+  const query = searchParams.toString();
+
+  return query ? `?${query}` : '';
 }
 
 /** GET /api/events → { items, totalCount, page, pageSize } */
