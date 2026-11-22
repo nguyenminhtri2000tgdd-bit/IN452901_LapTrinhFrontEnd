@@ -48,5 +48,10 @@ export function getSeatStatus(seat: SeatInfo): SeatStatus {
 /** { capacity: 60, registeredCount: 48 } → "Còn 12/60 chỗ" */
 export function formatSeats(seat: SeatInfo): string {
   // TODO(ch3-T1): hết chỗ → "Đã đủ 60 chỗ"; còn chỗ → "Còn 12/60 chỗ"
-  return `${seat.capacity} chỗ`;
+  const seatsLeft = getSeatsLeft(seat);
+  if (seatsLeft === 0) {
+    return `Đã đủ ${seat.capacity} chỗ`;
+  }
+
+  return `Còn ${seatsLeft}/${seat.capacity} chỗ`;
 }

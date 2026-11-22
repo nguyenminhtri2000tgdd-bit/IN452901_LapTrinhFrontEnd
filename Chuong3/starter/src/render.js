@@ -4,6 +4,8 @@
 // TODO(ch3-T3): khi viết card, import thêm:
 //   import { getClubImage } from './club-images.js';
 //   import { formatDateTime, formatSeats, getSeatStatus } from './utils/format.ts';
+import { getClubImage } from './club-images.js';
+import { formatDateTime, formatSeats, getSeatStatus } from './utils/format.ts';
 
 /** Tạo một phần tử: el('p', { className: 'tag', text: 'CLB Tin học' }) */
 export function el(tag, { className, text, attrs = {} } = {}, children = []) {
@@ -21,18 +23,43 @@ export function createSeatBadge(event) {
   //   'full'        → <span class="badge badge--full">Hết chỗ</span>
   //   'almost-full' → <span class="badge badge--hot">Sắp hết chỗ</span>
   //   'available'   → null
+  const status = getSeatStatus(event);
+
+  if (status === 'full') {
+    return el('span', {
+      className: 'badge badge--full',
+      text: 'Hết chỗ',
+    });
+  }
+  if (status === 'almost-full') {
+    return el('span', {
+      className: 'badge badge--hot',
+      text: 'Sắp hết chỗ',
+    });
+  }
+
   return null;
 }
 
 /** Dòng "CLB Tin học [Sắp hết chỗ]" dùng chung cho card và trang chi tiết */
 export function createEventMeta(event, clubName) {
   // TODO(ch3-T3): <p class="card__meta"><span class="tag">{clubName}</span> {badge nếu có}</p>
-  return el('p', { className: 'card__meta', text: clubName });
+  const tag = el('span', {className: 'tag', text: clubName,});
+
+  const badge = createSeatBadge(event);
+  const children = badge ? [tag, badge] : [tag];
+
+  return el('p', {className: 'card__meta',}, children);
 }
 
 export function createTime(iso) {
   // TODO(ch3-T3): <time datetime="{iso}">{formatDateTime(iso)}</time>
-  return el('time', { text: iso, attrs: { datetime: iso } });
+  return el('time', {
+    text: formatDateTime(iso),
+    attrs: {
+      datetime: iso,
+    },
+  });
 }
 
 /** Một card sự kiện — cùng cấu trúc HTML với card tĩnh ở Ch02 để dùng lại CSS */
@@ -49,8 +76,56 @@ export function createEventCard(event, clubName) {
   //   </div>
   // </article>
   // Chỉ dùng el()/textContent/setAttribute — KHÔNG dùng innerHTML với dữ liệu từ server.
-  return el('article', { className: 'card event-card' }, [
-    el('div', { className: 'card__body', text: `TODO(ch3-T3): ${event.name}` }),
+  const image = el('img', {
+    className: 'card__media',
+    attrs: {
+      src: getClubImage(event.clubId),
+      alt: `Biểu tượng ${clubName}`,
+      width: '640',
+      height: '360',
+      loading: 'lazy',
+    },
+  });
+
+  const title = el('h3', {
+    className: 'card__title',
+  }, [
+    el('a', {
+      text: event.name,
+      attrs: {
+        href: `event-detail.html?id=${encodeURIComponent(event.id)}`,
+      },
+    }),
+  ]);
+
+  const info = el('p', {
+    className: 'event-card__info',
+  }, [
+    createTime(event.startTime),
+    el('span', { text: ` · ${event.location}` }),
+  ]);
+
+  const body = el('div', {
+    className: 'card__body',
+  }, [
+    createEventMeta(event, clubName),
+    title,
+    info,
+    el('p', {
+      className: 'card__text',
+      text: event.description,
+    }),
+    el('p', {
+      className: 'event-card__seats',
+      text: formatSeats(event),
+    }),
+  ]);
+
+  return el('article', {
+    className: 'card event-card',
+  }, [
+    image,
+    body,
   ]);
 }
 
@@ -61,7 +136,12 @@ export function createEventCard(event, clubName) {
 export function renderEventList(container, events, clubNames) {
   // TODO(ch3-T3): map mỗi event thành createEventCard(event, tên CLB lấy từ clubNames (Map id → tên)),
   // rồi container.replaceChildren(...cards)
-  container.textContent = `TODO(ch3-T3): vẽ ${events.length} sự kiện`;
+  const cards = events.map((event) => {
+    const clubName = clubNames.get(event.clubId) ?? 'Câu lạc bộ';
+    return createEventCard(event, clubName);
+  });
+
+  container.replaceChildren(...cards);
 }
 
 /**
